@@ -8,10 +8,11 @@ def main():
     import time
 
     start = time.time()
+    postgre_jar_path = "/opt/bitnami/spark/jars/postgresql-42.7.2.jar"
 
     spark = SparkSession.builder \
         .appName("MyPySparkApp") \
-        .config("spark.jars", "/opt/bitnami/spark/jars/postgresql-42.7.2.jar") \
+        .config("spark.jars", postgre_jar_path) \
         .getOrCreate()
 
     # ============== Extract from parquet files
