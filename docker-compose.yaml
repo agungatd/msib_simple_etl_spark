@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+  spark-master:
+    build: .
+    command: bin/spark-class org.apache.spark.deploy.master.Master
+    ports:
+      - "9090:8080"
+      - "7077:7077"
+    volumes:
+       - ./apps:/opt/bitnami/spark/apps
+       - ./data:/opt/bitnami/spark/data
+  spark-worker-1:
+    build: .
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    depends_on:
+      - spark-master
+    environment:
+      SPARK_MODE: worker
+      SPARK_WORKER_CORES: 1
+      SPARK_WORKER_MEMORY: 1g
+      SPARK_MASTER_URL: spark://spark-master:7077
+    volumes:
+       - ./apps:/opt/bitnami/spark/apps
+       - ./data:/opt/bitnami/spark/data
+  spark-worker-2:
+    build: .
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    depends_on:
+      - spark-master
+    environment:
+      SPARK_MODE: worker
+      SPARK_WORKER_CORES: 1
+      SPARK_WORKER_MEMORY: 1g
+      SPARK_MASTER_URL: spark://spark-master:7077
+    volumes:
+       - ./apps:/opt/bitnami/spark/apps
+       - ./data:/opt/bitnami/spark/data
+  spark-dwh:
+    image: postgres:14
+    ports: 
+      - "5432:5432"
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
