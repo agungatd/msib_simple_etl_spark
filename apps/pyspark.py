@@ -25,20 +25,23 @@ transformed_df = df.groupBy(col("product_name"))\
 print(transformed_df.show())
 
 # Load to DWH
-jdbc_url = "jdbc:postgresql://localhost:5432/postgres"
+jdbc_url = "jdbc:postgresql://spark-dwh:5432/postgres"
 table_name = "product_sales"  # Replace with your desired table name
 user = "postgres"
 password = "password"
 
-transformed_df.write \
-  .format("jdbc") \
-  .option("url", jdbc_url) \
-  .option("driver", "org.postgresql.Driver") \
-  .option("dbtable", table_name) \
-  .option("user", user) \
-  .option("password", password) \
-  .mode("overwrite") \
-  .save()
+try:
+    transformed_df.write \
+        .format("jdbc") \
+        .option("url", jdbc_url) \
+        .option("driver", "org.postgresql.Driver") \
+        .option("dbtable", table_name) \
+        .option("user", user) \
+        .option("password", password) \
+        .mode("overwrite") \
+        .save()
+except Exception as e:
+    print(f'[ERROR] - {e}')
 
 spark.stop()
 print(f'Time elapsed: {round(time.time() - start ,2)} s')

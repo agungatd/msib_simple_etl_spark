@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   spark-master:
-    build: .
+    image: cluster-apache-spark:3.4.3
     command: bin/spark-class org.apache.spark.deploy.master.Master
     ports:
       - "9090:8080"
@@ -11,7 +11,7 @@ services:
        - ./apps:/opt/bitnami/spark/apps
        - ./data:/opt/bitnami/spark/data
   spark-worker-1:
-    build: .
+    image: cluster-apache-spark:3.4.3
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     depends_on:
       - spark-master
@@ -24,7 +24,7 @@ services:
        - ./apps:/opt/bitnami/spark/apps
        - ./data:/opt/bitnami/spark/data
   spark-worker-2:
-    build: .
+    image: cluster-apache-spark:3.4.3
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     depends_on:
       - spark-master
@@ -43,3 +43,7 @@ services:
     environment: 
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data: {}
