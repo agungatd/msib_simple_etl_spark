@@ -24,7 +24,7 @@ def main():
     # Replace specific values in product_name column with desired names
     df = df.withColumn(
         "product_name",
-        F.when(F.col("product_name") == "product_N", "kacang_goreng")
+        F.when(F.col("product_name") == "product_N", "kacang goreng")
         .when(F.col("product_name") == "product_H", "pesawat jet")
         .otherwise(F.col("product_name"))
     )
@@ -36,7 +36,7 @@ def main():
     df = df.withColumn("total_amount", F.col("amount") * 1.11)
 
     transformed_df = df.groupBy(F.col("product_name"))\
-        .agg(sum(F.col("amount")).alias("total_amount"))\
+        .agg(F.sum(F.col("amount")).alias("total_amount"))\
         .orderBy(F.desc("total_amount"))
 
     print('\nTransformed Data:')
@@ -58,7 +58,8 @@ def main():
             .option("password", password) \
             .mode("overwrite") \
             .save()
-        print('[SUCCESS] - Data has been load to DWH!')
+        
+        print('[SUCCESS] - Data has been loaded to DWH!')
     except Exception as e:
         print(f'[ERROR] - {e}')
 
