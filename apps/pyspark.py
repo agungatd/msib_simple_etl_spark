@@ -58,7 +58,7 @@ def main():
             .option("password", password) \
             .mode("overwrite") \
             .save()
-        
+
         print('[SUCCESS] - Data has been loaded to DWH!')
     except Exception as e:
         print(f'[ERROR] - {e}')
