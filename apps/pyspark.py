@@ -19,6 +19,7 @@ def main():
     df = spark.read.parquet("data/parquet/")
     print(df.show(5))
     print(f'Total data extracted: {df.count()} rows')
+    print(df.printSchema())
 
     # ============== Transformation
     # Replace specific values in product_name column with desired names
